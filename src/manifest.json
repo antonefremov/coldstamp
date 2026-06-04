@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Subscription Insurance (dev)",
+  "version": "0.1.0",
+  "description": "Records what a checkout page showed and what you consented to.",
+  "permissions": ["storage", "activeTab", "scripting"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "src/background.ts",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "Subscription Insurance",
+    "default_popup": "src/dashboard/index.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content/page-world.ts"],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content/index.ts"],
+      "run_at": "document_start"
+    }
+  ]
+}
