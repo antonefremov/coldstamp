@@ -14,7 +14,7 @@ import { labelFor } from "../lib/dom";
 
 // page-world fetch/XHR hook is loaded as a separate content_script with
 // "world": "MAIN" — see manifest.json. It posts payment-ish requests via
-// window.postMessage with __si: "__SI_NET__".
+// window.postMessage with __cs: "__CS_NET__".
 
 // ---- shared capture state ----------------------------------------------------
 const interactedEls = new WeakSet<Element>();
@@ -61,7 +61,7 @@ document.addEventListener("scroll", () => {
 // ---- listen for payment-ish requests from page world ------------------------
 window.addEventListener("message", (ev: MessageEvent) => {
   const data = ev.data;
-  if (!data || data.__si !== "__SI_NET__") return;
+  if (!data || data.__cs !== "__CS_NET__") return;
   const p = data.payload;
   const body = String(p.body || "");
   const charge = extractChargeFromBody(body);
@@ -261,7 +261,7 @@ async function captureNow(reason: string) {
     anchor: null,
   };
   await putBundle(bundle);
-  console.info("[SI] captured bundle", bundle.id, "root", hash);
+  console.info("[ColdStamp] captured bundle", bundle.id, "root", hash);
 }
 
 document.addEventListener(

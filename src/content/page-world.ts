@@ -3,7 +3,7 @@
 // content script via window.postMessage.
 
 (() => {
-  const TAG = "__SI_NET__";
+  const TAG = "__CS_NET__";
 
   const PAYMENT_HINTS = [
     "stripe.com",
@@ -23,7 +23,7 @@
   };
 
   const post = (payload: any) => {
-    window.postMessage({ __si: TAG, payload }, "*");
+    window.postMessage({ __cs: TAG, payload }, "*");
   };
 
   const safeStringifyBody = (body: any): string => {

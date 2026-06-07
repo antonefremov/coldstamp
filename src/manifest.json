@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Subscription Insurance (dev)",
+  "name": "ColdStamp (dev)",
   "version": "0.1.0",
-  "description": "Records what a checkout page showed and what you consented to.",
+  "description": "Warns about dark patterns at checkout and records what you consented to.",
   "permissions": ["storage", "activeTab", "scripting"],
   "host_permissions": ["<all_urls>"],
   "background": {
@@ -10,7 +10,7 @@
     "type": "module"
   },
   "action": {
-    "default_title": "Subscription Insurance",
+    "default_title": "ColdStamp",
     "default_popup": "src/dashboard/index.html"
   },
   "content_scripts": [

@@ -8,7 +8,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   }
   chrome.tabs.captureVisibleTab(windowId, { format: "png" }, (dataUrl) => {
     if (chrome.runtime.lastError) {
-      console.warn("[SI] capture failed", chrome.runtime.lastError.message);
+      console.warn("[ColdStamp] capture failed", chrome.runtime.lastError.message);
       sendResponse({ dataUrl: null });
       return;
     }
