@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>How ColdStamp works</title>
+    <style>
+      :root {
+        --fg: #1a202c;
+        --muted: #4a5568;
+        --faint: #718096;
+        --rule: #e2e8f0;
+        --card-bg: #f7fafc;
+        --accent: #2b6cb0;
+      }
+      * { box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        background: #fff;
+        color: var(--fg);
+        font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      }
+      body { padding: 56px 24px 96px; }
+      main { max-width: 680px; margin: 0 auto; }
+      header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        margin-bottom: 40px;
+      }
+      .wordmark { font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+      .version { font-size: 12px; color: var(--faint); font-variant-numeric: tabular-nums; }
+      h1 { font-size: 32px; line-height: 1.2; letter-spacing: -0.02em; margin: 0 0 12px; }
+      .lead { font-size: 18px; color: var(--fg); margin: 0 0 32px; }
+      h2 {
+        font-size: 16px; letter-spacing: 0.02em; text-transform: uppercase;
+        color: var(--faint); margin: 0 0 12px;
+      }
+      .card {
+        background: var(--card-bg); border: 1px solid var(--rule);
+        border-radius: 10px; padding: 22px 24px; margin-bottom: 24px;
+      }
+      p { color: var(--muted); margin: 0 0 14px; }
+      p:last-child { margin-bottom: 0; }
+      ul { color: var(--muted); padding-left: 22px; margin: 0 0 14px; }
+      li { margin-bottom: 6px; }
+      code {
+        font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+        background: #edf2f7; padding: 1px 6px; border-radius: 3px; color: var(--fg);
+      }
+      strong { color: var(--fg); }
+      a { color: var(--accent); }
+      a:hover { text-decoration: none; }
+      footer {
+        margin-top: 48px; border-top: 1px solid var(--rule);
+        padding-top: 16px; color: var(--faint); font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="wordmark">ColdStamp</div>
+        <!-- Keep in sync with manifest.json#version on each release. -->
+        <div class="version">v0.2.0</div>
+      </header>
+
+      <h1>How ColdStamp works</h1>
+
+      <p class="lead">
+        ColdStamp is a Chrome extension that does two separate things at checkout.
+        Both run entirely on your device.
+      </p>
+
+      <section class="card">
+        <h2>1. The warning panel</h2>
+        <p>
+          When you visit a checkout page, ColdStamp quietly scans it for
+          patterns associated with hidden charges:
+        </p>
+        <ul>
+          <li>A recurring or auto-renewing option that is already ticked for you</li>
+          <li>A free trial that quietly converts to a paid plan</li>
+          <li>A recurring price shown in much smaller or fainter type than the headline</li>
+          <li>An order total that is bigger than the items add up to</li>
+          <li>A "no" button worded to make you feel bad for declining</li>
+        </ul>
+        <p>
+          When one of these is found, a small panel appears in the corner of
+          the page. The panel is informational — it does not change the page,
+          submit anything, or interfere with checkout. You can dismiss it.
+        </p>
+        <p>
+          The panel runs without saving anything about you. It works whether
+          or not you have turned on evidence capture.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>2. The evidence record</h2>
+        <p>
+          When you click a primary checkout button — Subscribe, Start free
+          trial, Place order — ColdStamp captures a redacted snapshot of the
+          page at that moment. This is your own record of what the page
+          actually showed and what you agreed to.
+        </p>
+        <p>The snapshot contains:</p>
+        <ul>
+          <li>Which form fields existed and which boxes were ticked</li>
+          <li>A timestamped log of your clicks and scrolls on the page</li>
+          <li>The amount and currency of any payment request the page sent</li>
+          <li>A screenshot of the visible part of the page</li>
+          <li>A SHA-256 fingerprint of the whole thing, so any later tampering is detectable</li>
+        </ul>
+        <p>This feature is <strong>off by default</strong> and only runs after you turn it on.</p>
+        <p>The snapshot does <strong>not</strong> contain:</p>
+        <ul>
+          <li>Your card number or CVV — these are replaced with <code>[REDACTED]</code> before anything is stored</li>
+          <li>The raw payment request body — only a hash of it is kept</li>
+          <li>Any data about pages outside checkouts</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>What leaves your device</h2>
+        <p>
+          <strong>Nothing.</strong> Everything ColdStamp captures stays in your
+          browser's local storage. There is no ColdStamp server, no account,
+          no analytics. You can confirm this by reading the
+          source code (link below).
+        </p>
+        <p>
+          You can export any snapshot as a JSON file from the extension popup
+          and share it however you like — for example, attaching it to a
+          chargeback claim. That export is the first time any record leaves your
+          device, and you decide who to send it to.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>Why this exists</h2>
+        <p>
+          Subscription vendors keep structured, timestamped records of every
+          signup. When something goes wrong, they show up to disputes with logs
+          and screenshots. You show up with a vague memory.
+        </p>
+        <p>
+          ColdStamp is the user's side of that record. It does not chase down
+          the vendor for you, does not file disputes, does not connect to your
+          bank. It just makes sure that when you need to prove what the page
+          actually said, you can.
+        </p>
+      </section>
+
+      <footer>
+        <a
+          href="https://antonefremov.github.io/coldstamp-site/privacy.html"
+          target="_blank"
+          rel="noopener"
+          >Privacy policy</a
+        >
+      </footer>
+    </main>
+
+  </body>
+</html>
