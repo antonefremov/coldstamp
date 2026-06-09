@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Welcome to ColdStamp</title>
+    <link rel="stylesheet" href="./onboarding.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="wordmark">ColdStamp</div>
+      </header>
+
+      <h1>Your symmetric record of what you signed up for.</h1>
+
+      <p class="lead">
+        ColdStamp does two things at checkout. It <strong>warns</strong> you about
+        pre-ticked recurring charges, buried renewal terms, and other dark
+        patterns. And it can <strong>keep your own record</strong> of what the
+        page showed and what you agreed to — stored on your device, never
+        transmitted.
+      </p>
+
+      <section class="card">
+        <h2>What you need to know</h2>
+        <ul>
+          <li>Everything stays on your device. No account, no servers.</li>
+          <li>Card numbers and CVVs are redacted before anything is stored.</li>
+          <li>You can export or delete any record from the extension popup at any time.</li>
+          <li>The warning panel runs without storing anything about you.</li>
+        </ul>
+        <p>
+          The full
+          <a id="policy-link" href="#" target="_blank" rel="noopener">privacy policy</a>
+          covers the details.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>Confirm to continue</h2>
+
+        <label class="check">
+          <input type="checkbox" id="age" />
+          <span>I am 18 years or older.</span>
+        </label>
+
+        <label class="check">
+          <input type="checkbox" id="capture" />
+          <span>
+            <strong>Turn on evidence capture.</strong>
+            When I click a subscribe / pay button on a checkout page, ColdStamp
+            will save a redacted snapshot to my device. Optional — the warning
+            panel works without it.
+          </span>
+        </label>
+
+        <p class="note">Both settings can be changed later in the popup.</p>
+
+        <button id="get-started" disabled>Get started</button>
+      </section>
+
+      <footer>
+        Policy version <span id="policy-version"></span> · Made in Melbourne, Australia.
+      </footer>
+    </main>
+    <script type="module" src="./onboarding.ts"></script>
+  </body>
+</html>

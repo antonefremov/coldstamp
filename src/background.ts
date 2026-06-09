@@ -1,4 +1,12 @@
-// Service worker — only job in M1 is to grab a viewport screenshot on request.
+// Service worker.
+
+// Open first-run onboarding on install (not on browser update).
+chrome.runtime.onInstalled.addListener((details) => {
+  if (details.reason !== "install") return;
+  chrome.tabs.create({ url: chrome.runtime.getURL("src/onboarding/index.html") });
+});
+
+// Screenshot on demand from the content script.
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg?.kind !== "captureScreenshot") return;
   const windowId = sender.tab?.windowId;

@@ -1,0 +1,1 @@
+{"root":["./src/background.ts","./src/content/detectors.ts","./src/content/index.ts","./src/content/page-world.ts","./src/content/panel.ts","./src/dashboard/main.ts","./src/lib/consent.ts","./src/lib/db.ts","./src/lib/dom.ts","./src/lib/lexicon.ts","./src/lib/redact.ts","./src/lib/seal.ts","./src/lib/types.ts","./src/onboarding/onboarding.ts"],"version":"5.9.3"}
