@@ -7,10 +7,10 @@ import type {
 } from "../lib/types";
 import { isSensitiveField, redactValue, redactBodySnippet, redactFreeText } from "../lib/redact";
 import { rootHash, sha256Hex } from "../lib/seal";
-import { putBundle } from "../lib/db";
 import { isCheckoutLikePage, runDetectors } from "./detectors";
 import { render as renderPanel, unmount as unmountPanel } from "./panel";
 import { labelFor } from "../lib/dom";
+import { getConsent, hasCapture } from "../lib/consent";
 
 // page-world fetch/XHR hook is loaded as a separate content_script with
 // "world": "MAIN" — see manifest.json. It posts payment-ish requests via
@@ -233,6 +233,11 @@ const CTA_RE = /\b(pay|subscribe|start|confirm|place order|continue)\b/i;
 let lastCaptureAt = 0;
 async function captureNow(reason: string) {
   if (!looksLikeCheckout()) return;
+  // Consent gate: sealed capture requires explicit `core_protection` opt-in.
+  // The preventative-detection panel is read-only and runs regardless. See
+  // privacy policy §6 and docs/PERMISSIONS.md.
+  const consent = await getConsent();
+  if (!hasCapture(consent)) return;
   const now = Date.now();
   if (now - lastCaptureAt < 2000) return;
   lastCaptureAt = now;
@@ -260,7 +265,14 @@ async function captureNow(reason: string) {
     rootHash: hash,
     anchor: null,
   };
-  await putBundle(bundle);
+  // Hand off to the service worker, which owns the extension-origin IndexedDB.
+  // The content script runs in the page's origin, so writing locally would
+  // store the bundle per-merchant where the popup can't see it.
+  try {
+    await chrome.runtime.sendMessage({ kind: "saveBundle", bundle });
+  } catch (e) {
+    console.warn("[ColdStamp] saveBundle failed", e);
+  }
   console.info("[ColdStamp] captured bundle", bundle.id, "root", hash);
 }
 
