@@ -4,6 +4,12 @@
   "version": "0.2.0",
   "description": "Warns about dark patterns at checkout and quietly keeps your own record of what you consented to.",
   "permissions": ["storage", "activeTab"],
+  "icons": {
+    "16": "src/icons/icon-16.png",
+    "32": "src/icons/icon-32.png",
+    "48": "src/icons/icon-48.png",
+    "128": "src/icons/icon-128.png"
+  },
   "host_permissions": ["http://*/*", "https://*/*"],
   "background": {
     "service_worker": "src/background.ts",
@@ -11,7 +17,13 @@
   },
   "action": {
     "default_title": "ColdStamp",
-    "default_popup": "src/dashboard/index.html"
+    "default_popup": "src/dashboard/index.html",
+    "default_icon": {
+      "16": "src/icons/icon-16.png",
+      "32": "src/icons/icon-32.png",
+      "48": "src/icons/icon-48.png",
+      "128": "src/icons/icon-128.png"
+    }
   },
   "content_scripts": [
     {
