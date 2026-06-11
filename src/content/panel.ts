@@ -79,7 +79,12 @@ function template(findings: Finding[]): string {
         display: flex; align-items: center; justify-content: space-between;
         padding: 10px 12px; border-bottom: 1px solid #edf2f7;
       }
-      .brand { font-weight: 600; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: #4a5568; }
+      .brand {
+        display: flex; align-items: center; gap: 6px;
+        font-weight: 600; font-size: 12px; letter-spacing: 0.04em;
+        text-transform: uppercase; color: #4a5568;
+      }
+      .brand svg { display: block; flex: 0 0 16px; }
       .close {
         background: none; border: 0; cursor: pointer; padding: 2px 6px;
         font-size: 16px; color: #718096; border-radius: 4px;
@@ -101,7 +106,18 @@ function template(findings: Finding[]): string {
     </style>
     <div class="panel" role="dialog" aria-label="ColdStamp warnings">
       <div class="header">
-        <div class="brand">ColdStamp</div>
+        <div class="brand">
+          <svg width="16" height="16" viewBox="0 0 128 128" aria-hidden="true">
+            <rect x="0" y="0" width="128" height="128" rx="24" ry="24" fill="#1e3a8a"/>
+            <g fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round">
+              <line x1="64" y1="28" x2="64" y2="100"/>
+              <line x1="28" y1="64" x2="100" y2="64"/>
+              <line x1="42" y1="42" x2="86" y2="86"/>
+              <line x1="86" y1="42" x2="42" y2="86"/>
+            </g>
+          </svg>
+          <span>ColdStamp</span>
+        </div>
         <button class="close" aria-label="Dismiss">×</button>
       </div>
       <div class="row sev-${top.severity}">
