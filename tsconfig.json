@@ -10,7 +10,8 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "types": ["chrome", "vite/client"]
+    "types": ["chrome", "vite/client"],
+    "noEmit": true
   },
   "include": ["src", "fixtures"],
   "exclude": ["**/vite.config.ts"],

@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "fixture": "vite --config fixtures/vite.config.ts",
-    "icons": "node scripts/build-icons.mjs"
+    "icons": "node scripts/build-icons.mjs",
+    "promo-tile": "node scripts/build-promo.mjs"
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.0.0-beta.25",

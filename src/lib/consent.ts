@@ -6,7 +6,7 @@
 // shape to a list of {grantedAt, withdrawnAt} records keyed by purpose.
 
 export const PRIVACY_POLICY_URL =
-  "https://antonefremov.github.io/coldstamp-site/privacy.html";
+  "https://coldstamp.app/privacy.html";
 
 export const POLICY_VERSION = "1.0";
 
