@@ -84,8 +84,7 @@ server. The full privacy policy is linked below.
 
 Source.
 
-ColdStamp's source code is open and auditable. The repository link will be
-added here once the public release is shipped.
+ColdStamp's source code is open: https://github.com/antonefremov/coldstamp
 
 You must be 18 or older to use ColdStamp.
 ```
@@ -168,7 +167,7 @@ Also check the three required attestations:
 
 ## Homepage URL
 
-> https://coldstamp.app/
+> https://antonefremov.github.io/coldstamp-site/
 
 ## Support email
 
