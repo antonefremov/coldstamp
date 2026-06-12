@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "ColdStamp (dev)",
+  "name": "ColdStamp",
   "version": "0.2.0",
   "description": "Warns about dark patterns at checkout and quietly keeps your own record of what you consented to.",
   "permissions": ["storage", "activeTab"],
