@@ -114,6 +114,21 @@ last week.
 See [README.md](./README.md) — covers Node pin, install, build, the
 fixture, loading unpacked.
 
+### Optional: enable the pre-commit secret scan
+
+```bash
+brew install gitleaks   # or your package manager of choice
+git config core.hooksPath .githooks
+```
+
+After that, every `git commit` runs `gitleaks protect --staged` against the
+diff and refuses commits containing anything that looks like a credential.
+The same check runs in CI on every PR, so this is purely a "catch it before
+pushing" convenience.
+
+If gitleaks isn't installed, the hook silently skips — it never blocks a
+commit because of a missing binary.
+
 ## Code of conduct
 
 Be kind, be brief, be specific. Disagreement is fine; personal attacks

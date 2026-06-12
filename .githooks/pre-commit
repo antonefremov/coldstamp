@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# ColdStamp pre-commit hook: runs gitleaks against the staged changes.
+# Enable on a fresh clone with:
+#   git config core.hooksPath .githooks
+# Requires gitleaks on PATH (brew install gitleaks).
+
+set -euo pipefail
+
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo "ColdStamp pre-commit: gitleaks not on PATH — skipping secret scan."
+  echo "  Install with: brew install gitleaks  (or see https://github.com/gitleaks/gitleaks)"
+  exit 0
+fi
+
+# Scan only what is staged for this commit.
+if ! gitleaks protect --staged --verbose --redact; then
+  echo
+  echo "ColdStamp pre-commit: gitleaks found something that looks like a secret."
+  echo "  Review the report above. If it is a false positive, add an entry to"
+  echo "  .gitleaks.toml and re-run the commit."
+  exit 1
+fi

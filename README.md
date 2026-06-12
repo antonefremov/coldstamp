@@ -133,6 +133,10 @@ builds the extension, zips `dist/` into `coldstamp-<version>.zip`, and
 attaches that zip plus the SHA-256 digests to the GitHub release. The release
 body is the canonical place to find the verification hash for that version.
 
+[`/.github/workflows/secret-scan.yml`](./.github/workflows/secret-scan.yml)
+runs gitleaks against every PR and push. Contributors can also enable the
+same scan locally as a pre-commit hook — see [CONTRIBUTING.md](./CONTRIBUTING.md).
+
 ## License
 
 [AGPL-3.0-only](./LICENSE). Copyleft on purpose: anyone can read, audit, and

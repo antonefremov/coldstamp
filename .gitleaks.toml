@@ -1,0 +1,18 @@
+# gitleaks configuration for ColdStamp.
+# Extends the bundled default ruleset (https://github.com/gitleaks/gitleaks).
+# Add allowlist entries below when a genuine false positive is hit.
+
+[extend]
+useDefault = true
+
+# Allowlist for known false positives. Keep narrow — broad allowlists defeat
+# the purpose of the scanner.
+[allowlist]
+description = "ColdStamp allowlist"
+paths = [
+  # The vendored AGPL-3.0 license text contains the literal word "key" and
+  # other tokens that occasionally trip looser rulesets.
+  '''(?i)^license$''',
+  # The fixture page contains a fake card number that some rulesets flag.
+  '''^fixtures/fake-checkout/index\.html$''',
+]
