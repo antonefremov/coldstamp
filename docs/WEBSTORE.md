@@ -167,7 +167,7 @@ Also check the three required attestations:
 
 ## Homepage URL
 
-> https://antonefremov.github.io/coldstamp-site/
+> https://coldstamp.app/
 
 ## Support email
 

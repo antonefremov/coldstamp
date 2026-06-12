@@ -1,5 +1,9 @@
 # ColdStamp
 
+[![CI](https://github.com/antonefremov/coldstamp/actions/workflows/ci.yml/badge.svg)](https://github.com/antonefremov/coldstamp/actions/workflows/ci.yml)
+[![Secret scan](https://github.com/antonefremov/coldstamp/actions/workflows/secret-scan.yml/badge.svg)](https://github.com/antonefremov/coldstamp/actions/workflows/secret-scan.yml)
+[![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](./LICENSE)
+
 A Chrome extension that does two complementary jobs at checkout:
 
 1. **Preventative (before you click):** scans the page for dark patterns —
