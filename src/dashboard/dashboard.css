@@ -130,6 +130,12 @@ button.link:hover { text-decoration: underline; }
 .row .meta .pill.warn { background: #fef3c7; color: var(--warn); }
 .row .meta .pill.bad { background: #fed7d7; color: var(--bad); }
 
+.row .hint {
+  color: var(--muted);
+  font-size: 11px;
+  margin-bottom: 6px;
+}
+
 .row .hash {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 10px;

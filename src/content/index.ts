@@ -5,7 +5,7 @@ import type {
   InteractionEvent,
   NetworkCharge,
 } from "../lib/types";
-import { isSensitiveField, redactValue, redactBodySnippet, redactFreeText } from "../lib/redact";
+import { isSensitiveField, redactValue, redactBodySnippet, redactFreeText, hintFromEmail } from "../lib/redact";
 import { rootHash, sha256Hex } from "../lib/seal";
 import { isCheckoutLikePage, runDetectors } from "./detectors";
 import { render as renderPanel, unmount as unmountPanel } from "./panel";
@@ -218,6 +218,19 @@ function disclosureVisibility(): DisclosureVisibility[] {
   return out;
 }
 
+function deriveAccountHint(): string | null {
+  const fields = document.querySelectorAll<HTMLInputElement>(
+    'input[autocomplete="email"], input[type="email"]'
+  );
+  for (const el of fields) {
+    const v = (el.value || "").trim();
+    if (!v) continue;
+    const hint = hintFromEmail(v);
+    if (hint) return hint;
+  }
+  return null;
+}
+
 async function requestScreenshot(): Promise<string | null> {
   try {
     const resp = await chrome.runtime.sendMessage({ kind: "captureScreenshot" });
@@ -241,16 +254,21 @@ async function captureNow(reason: string) {
   const now = Date.now();
   if (now - lastCaptureAt < 2000) return;
   lastCaptureAt = now;
+  // Derive the account hint BEFORE snapshotControls runs — it reads the live
+  // DOM for an unredacted email value and converts it to "an…@domain" so the
+  // sealed bundle never contains the full address.
+  const merchantAccountHint = deriveAccountHint();
   const controlState = snapshotControls();
   const dv = disclosureVisibility();
   const screenshot = await requestScreenshot();
 
   const bundleSansHash = {
-    schemaVersion: 1 as const,
+    schemaVersion: 2 as const,
     capturedAt: Date.now(),
     merchantDomain: location.host,
     pageUrl: location.href,
     pageTitle: document.title.slice(0, 200),
+    merchantAccountHint,
     controlState,
     interactionLog: interactionLog.slice(),
     networkCharges: networkCharges.slice(),

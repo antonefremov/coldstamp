@@ -46,6 +46,19 @@ export function redactFreeText(text: string): string {
   return text.replace(CARD_RE, "[REDACTED_CARD]").replace(EMAIL_RE, "[REDACTED_EMAIL]");
 }
 
+// Turn "anton@gmail.com" into "an…@gmail.com" — enough to recognise your own
+// account at the merchant later, not enough to be PII on its own. Returns null
+// for inputs that don't look like an email at all.
+export function hintFromEmail(raw: string): string | null {
+  const trimmed = (raw || "").trim();
+  const at = trimmed.indexOf("@");
+  if (at < 1 || at === trimmed.length - 1) return null;
+  const user = trimmed.slice(0, at);
+  const domain = trimmed.slice(at);
+  const visible = user.length <= 2 ? user.slice(0, 1) : user.slice(0, 2);
+  return `${visible}…${domain}`;
+}
+
 export function redactBodySnippet(body: string): string {
   // For network bodies we don't keep the raw body — only a digest plus a
   // structurally-redacted preview. Defensive scrub anyway.

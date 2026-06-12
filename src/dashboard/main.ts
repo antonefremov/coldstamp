@@ -56,6 +56,13 @@ function renderBundles(bundles: EvidenceBundle[]) {
     meta.innerHTML = `${fmtTime(b.capturedAt)} · ${flaggedPill}${chargesPill}`;
     row.appendChild(meta);
 
+    if (b.merchantAccountHint) {
+      const hint = document.createElement("div");
+      hint.className = "hint";
+      hint.textContent = `account: ${b.merchantAccountHint}`;
+      row.appendChild(hint);
+    }
+
     const hash = document.createElement("div");
     hash.className = "hash";
     hash.textContent = `sha256:${b.rootHash}`;

@@ -38,11 +38,17 @@ export type DisclosureVisibility = {
 
 export type EvidenceBundle = {
   id: string;
-  schemaVersion: 1;
+  schemaVersion: 2;
   capturedAt: number;
   merchantDomain: string;
   pageUrl: string;
   pageTitle: string;
+  // Derived locally before redaction: a partial obfuscation of the email
+  // (or analogous identifier) the user submitted, like "an…@gmail.com".
+  // Lets the user link a bundle to an account at the merchant without
+  // exposing the full email inside the sealed bundle. May be null if no
+  // email field was present or filled.
+  merchantAccountHint: string | null;
   controlState: ControlSnapshot[];
   interactionLog: InteractionEvent[];
   networkCharges: NetworkCharge[];
