@@ -1,0 +1,104 @@
+name: Release
+
+# Triggered by pushing a tag like v0.2.0, or by manually publishing a release
+# in the GitHub UI. Builds the extension, computes the reproducible dist hash,
+# zips dist/ for upload to the Chrome Web Store, and attaches both the zip and
+# the digest to the GitHub release as verifiable artifacts.
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: write   # required to upload release assets
+
+jobs:
+  build-and-publish:
+    name: Build and attach release artifacts
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node (pinned by .nvmrc)
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install (reproducible)
+        run: npm ci
+
+      - name: Build extension
+        run: npm run build
+
+      - name: Compute reproducible dist digest
+        id: digest
+        run: |
+          DIGEST=$(npm run --silent verify)
+          echo "digest=$DIGEST" >> "$GITHUB_OUTPUT"
+          echo "$DIGEST  dist-tree.sha256" > dist-tree.sha256
+
+      - name: Read version from package.json
+        id: pkg
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Package dist/ for Web Store upload
+        run: |
+          ZIP_NAME="coldstamp-${{ steps.pkg.outputs.version }}.zip"
+          (cd dist && zip -r "../$ZIP_NAME" .)
+          shasum -a 256 "$ZIP_NAME" > "$ZIP_NAME.sha256"
+          echo "zip=$ZIP_NAME" >> "$GITHUB_ENV"
+
+      - name: Determine tag for release attachment
+        id: tag
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            echo "name=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.event_name }}" = "release" ]; then
+            echo "name=${{ github.event.release.tag_name }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=v${{ steps.pkg.outputs.version }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Attach artifacts and digest to GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.name }}
+          files: |
+            ${{ env.zip }}
+            ${{ env.zip }}.sha256
+            dist-tree.sha256
+          body: |
+            ## Reproducible build verification
+
+            This release was built from this exact tag by GitHub Actions.
+
+            **`dist/` tree digest (one SHA-256 over the whole built tree):**
+            ```
+            ${{ steps.digest.outputs.digest }}
+            ```
+
+            To verify locally:
+            ```bash
+            git checkout ${{ steps.tag.outputs.name }}
+            nvm use && npm ci && npm run build && npm run verify
+            ```
+
+            The hash printed by `npm run verify` must match the value above.
+
+            Attached:
+            - `${{ env.zip }}` — built `dist/` ready for Chrome Web Store upload
+            - `${{ env.zip }}.sha256` — SHA-256 of the zip
+            - `dist-tree.sha256` — SHA-256 of the unpacked `dist/` tree
+          fail_on_unmatched_files: true

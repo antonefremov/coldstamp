@@ -119,6 +119,20 @@ fixtures/
 - Per-site adapters for known offenders
 - Pre-submit interstitial on `high`-severity findings (kept inline-only for now)
 
+## Continuous integration
+
+Every pull request and push to `main` runs
+[`/.github/workflows/ci.yml`](./.github/workflows/ci.yml): `npm ci`, type
+check, build, and `npm run verify`. The single `dist/` tree digest is printed
+in the run summary so contributors and reviewers can confirm the build is
+deterministic on Linux too.
+
+Every tag matching `v*.*.*` runs
+[`/.github/workflows/release.yml`](./.github/workflows/release.yml), which
+builds the extension, zips `dist/` into `coldstamp-<version>.zip`, and
+attaches that zip plus the SHA-256 digests to the GitHub release. The release
+body is the canonical place to find the verification hash for that version.
+
 ## License
 
 [AGPL-3.0-only](./LICENSE). Copyleft on purpose: anyone can read, audit, and
