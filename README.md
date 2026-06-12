@@ -11,10 +11,42 @@ A Chrome extension that does two complementary jobs at checkout:
 
 Everything runs on-device. Nothing leaves your browser today.
 
+## Reproducible build
+
+The build is deterministic from a clean checkout — anyone can verify that the
+`dist/` produced from this source matches the `.crx` distributed via the Chrome
+Web Store, byte-for-byte (excluding signing metadata Chrome attaches at upload).
+
+Prerequisites:
+
+- Node `24.16.0` (pinned via `.nvmrc` and `package.json#engines`)
+- `npm` (bundled with Node)
+
+```bash
+nvm use            # or fnm use — picks up .nvmrc
+npm ci             # installs the exact tree from package-lock.json
+npm run build      # outputs dist/
+npm run verify     # prints a single SHA-256 over the whole dist/ tree
+```
+
+`npm run verify` prints one hex string covering every file in `dist/`. Compare
+it against the SHA-256 published in each GitHub release (added by CI). If they
+match, the extension distributed via the Chrome Web Store was built from this
+exact source. If they don't, please open an issue.
+
+To inspect individual files instead of the rolled-up tree hash:
+
+```bash
+shasum -a 256 dist/manifest.json dist/assets/*.js dist/assets/*.css
+```
+
+Use `npm install` only when intentionally updating dependencies; `npm ci` is
+what makes the install deterministic.
+
 ## Run the demo
 
 ```bash
-npm install
+npm ci
 npm run build       # builds the extension to dist/
 npm run fixture     # serves the fake checkout at http://localhost:5174
 ```
@@ -86,3 +118,32 @@ fixtures/
 - Encrypted cloud backup (M5)
 - Per-site adapters for known offenders
 - Pre-submit interstitial on `high`-severity findings (kept inline-only for now)
+
+## License
+
+[AGPL-3.0-only](./LICENSE). Copyleft on purpose: anyone can read, audit, and
+modify ColdStamp, but a fork that adds features or changes redaction behaviour
+must also stay open. This protects the trust contract — the product is "your
+symmetric record"; a closed fork would be the opposite of that.
+
+The privacy policy at <https://coldstamp.app/privacy.html> is the canonical
+statement of what ColdStamp does and does not do with information about you.
+
+## Verifying a release
+
+Each tagged release on GitHub publishes the SHA-256 of `dist/` produced by CI.
+To check that the Web Store build matches this source:
+
+1. `git checkout v0.X.0` (the tag matching the version in Chrome Web Store)
+2. `npm ci && npm run build && npm run verify`
+3. Compare the single SHA-256 it prints against the value in that release's
+   notes.
+
+For a deeper check, also compare per-file hashes:
+
+```bash
+shasum -a 256 dist/manifest.json dist/assets/*.js dist/assets/*.css
+```
+
+A mismatch means the Web Store binary does not correspond to this source.
+Open an issue immediately.

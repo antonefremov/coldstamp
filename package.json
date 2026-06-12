@@ -3,12 +3,17 @@
   "private": true,
   "version": "0.2.0",
   "type": "module",
+  "license": "AGPL-3.0-only",
+  "engines": {
+    "node": ">=24.16.0 <25"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "fixture": "vite --config fixtures/vite.config.ts",
     "icons": "node scripts/build-icons.mjs",
-    "promo-tile": "node scripts/build-promo.mjs"
+    "promo-tile": "node scripts/build-promo.mjs",
+    "verify": "node scripts/verify-build.mjs"
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.0.0-beta.25",
@@ -16,6 +21,6 @@
     "@types/node": "^25.9.2",
     "sharp": "^0.34.5",
     "typescript": "^5.5.4",
-    "vite": "^5.4.2"
+    "vite": "^8.0.16"
   }
 }
