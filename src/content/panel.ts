@@ -109,11 +109,12 @@ function template(findings: Finding[]): string {
         <div class="brand">
           <svg width="16" height="16" viewBox="0 0 128 128" aria-hidden="true">
             <rect x="0" y="0" width="128" height="128" rx="24" ry="24" fill="#1e3a8a"/>
-            <g fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round">
-              <line x1="64" y1="28" x2="64" y2="100"/>
-              <line x1="28" y1="64" x2="100" y2="64"/>
-              <line x1="42" y1="42" x2="86" y2="86"/>
-              <line x1="86" y1="42" x2="42" y2="86"/>
+            <circle cx="64" cy="64" r="46" fill="none" stroke="#fff" stroke-width="6"/>
+            <g fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round">
+              <line x1="64" y1="34" x2="64" y2="94"/>
+              <line x1="34" y1="64" x2="94" y2="64"/>
+              <line x1="44" y1="44" x2="84" y2="84"/>
+              <line x1="84" y1="44" x2="44" y2="84"/>
             </g>
           </svg>
           <span>ColdStamp</span>

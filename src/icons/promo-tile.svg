@@ -11,11 +11,12 @@
   <!-- Mark (same as icon), positioned left -->
   <g transform="translate(56 84)">
     <rect x="0" y="0" width="112" height="112" rx="22" ry="22" fill="#ffffff" fill-opacity="0.08" />
-    <g fill="none" stroke="#ffffff" stroke-width="11" stroke-linecap="round" transform="translate(56 56)">
-      <line x1="0" y1="-32" x2="0" y2="32" />
-      <line x1="-32" y1="0" x2="32" y2="0" />
-      <line x1="-20" y1="-20" x2="20" y2="20" />
-      <line x1="20" y1="-20" x2="-20" y2="20" />
+    <circle cx="56" cy="56" r="40" fill="none" stroke="#ffffff" stroke-width="5" />
+    <g fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round" transform="translate(56 56)">
+      <line x1="0" y1="-26" x2="0" y2="26" />
+      <line x1="-26" y1="0" x2="26" y2="0" />
+      <line x1="-17" y1="-17" x2="17" y2="17" />
+      <line x1="17" y1="-17" x2="-17" y2="17" />
     </g>
   </g>
 
